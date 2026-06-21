@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from 'react'
-import type { Task, TaskPriority } from '../types'
+import type { NewTaskInput, TaskPriority } from '../types'
 
 interface TaskFormProps {
-  onAddTask: (task: Task) => void
+  onAddTask: (task: NewTaskInput) => void
 }
 
 function TaskForm({ onAddTask }: TaskFormProps) {
@@ -15,7 +15,6 @@ function TaskForm({ onAddTask }: TaskFormProps) {
     if (!title.trim()) return
 
     onAddTask({
-      id: crypto.randomUUID(),
       title: title.trim(),
       description: description.trim(),
       status: 'TODO',

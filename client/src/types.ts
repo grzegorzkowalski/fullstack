@@ -18,3 +18,23 @@ export interface Project {
 export interface User {
   name: string
 }
+
+export interface Comment {
+  id: string
+  taskId: string
+  author: string
+  content: string
+  createdAt: string
+}
+
+export type NewTaskInput = Omit<Task, 'id' | 'status'> & { status?: TaskStatus }
+
+export type Result<T> = { success: true; data: T } | { success: false; error: string }
+
+export function parseTaskPriority(value: string): Result<TaskPriority> {
+  if (value === 'LOW' || value === 'MEDIUM' || value === 'HIGH') {
+    return { success: true, data: value }
+  }
+
+  return { success: false, error: `Nieznany priorytet: ${value}` }
+}

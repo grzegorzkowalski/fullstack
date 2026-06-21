@@ -4,15 +4,22 @@ import TaskForm from '../components/TaskForm'
 import TaskList from '../components/TaskList'
 import { projects } from '../data/mockProjects'
 import { tasksByProject } from '../data/mockTasks'
-import type { Task } from '../types'
+import type { NewTaskInput, Task } from '../types'
 
 function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>()
   const project = projects.find((item) => item.id === id)
   const [tasks, setTasks] = useState<Task[]>(id ? tasksByProject[id] ?? [] : [])
 
-  function handleAddTask(task: Task) {
-    setTasks((previousTasks) => [...previousTasks, task])
+  function handleAddTask(task: NewTaskInput) {
+    setTasks((previousTasks) => [
+      ...previousTasks,
+      {
+        ...task,
+        id: crypto.randomUUID(),
+        status: task.status ?? 'TODO',
+      },
+    ])
   }
 
   if (!project) {
