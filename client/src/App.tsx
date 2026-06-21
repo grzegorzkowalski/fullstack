@@ -1,4 +1,16 @@
+import { useState } from 'react'
+import TaskForm from './components/TaskForm'
+import TaskList from './components/TaskList'
+import { initialTasks } from './data/mockTasks'
+import type { Task } from './types'
+
 function App() {
+  const [tasks, setTasks] = useState<Task[]>(initialTasks)
+
+  function handleAddTask(newTask: Task) {
+    setTasks((previousTasks) => [...previousTasks, newTask])
+  }
+
   return (
     <div className="app">
       <header className="app-header">
@@ -6,10 +18,13 @@ function App() {
         <p>Mini-system zarzadzania zadaniami projektowymi</p>
       </header>
       <main>
-        <p>
-          To jest szkielet startowy projektu DevTrack. W kolejnych modulach
-          szkolenia ta aplikacja bedzie rozwijana krok po kroku.
-        </p>
+        <section>
+          <h2>Zadania</h2>
+          <TaskList tasks={tasks} />
+        </section>
+        <section>
+          <TaskForm onAddTask={handleAddTask} />
+        </section>
       </main>
     </div>
   )
