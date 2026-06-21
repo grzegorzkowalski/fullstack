@@ -1,3 +1,5 @@
+'use client'
+
 import type { Task, TaskStatus } from '../types'
 
 const STATUS_LABELS: Record<TaskStatus, string> = {

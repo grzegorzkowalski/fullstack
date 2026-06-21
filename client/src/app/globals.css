@@ -157,6 +157,10 @@ main {
   padding: 1.5rem;
 }
 
+.auth-panel {
+  margin: 0 auto;
+}
+
 .header-row {
   display: flex;
   align-items: flex-start;
@@ -183,4 +187,15 @@ main {
 
 .project-card:hover {
   outline: 2px solid #2b59ff;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.hint {
+  color: #666;
 }

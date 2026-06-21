@@ -1,13 +1,18 @@
-import type { ReactNode } from 'react'
-import { Navigate } from 'react-router-dom'
+'use client'
+
+import { useEffect, type ReactNode } from 'react'
+import { useRouter } from 'next/navigation'
 import { useUser } from '../context/UserContext'
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user } = useUser()
+  const router = useRouter()
 
-  if (!user) {
-    return <Navigate to="/login" replace />
-  }
+  useEffect(() => {
+    if (!user) router.replace('/login')
+  }, [router, user])
+
+  if (!user) return <p className="hint">Przekierowanie do logowania...</p>
 
   return children
 }

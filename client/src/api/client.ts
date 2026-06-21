@@ -1,4 +1,9 @@
-const API_BASE = 'http://localhost:4000'
+const PROJECTS_API_BASE = '/api'
+const TASKS_API_BASE = 'http://localhost:4000'
+
+function resolveBase(path: string): string {
+  return path.startsWith('/projects') ? PROJECTS_API_BASE : TASKS_API_BASE
+}
 
 export class ApiError extends Error {
   status: number
@@ -18,12 +23,12 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export async function apiGet<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`)
+  const response = await fetch(`${resolveBase(path)}${path}`)
   return handleResponse<T>(response)
 }
 
 export async function apiPost<T>(path: string, body: unknown): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(`${resolveBase(path)}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -32,7 +37,7 @@ export async function apiPost<T>(path: string, body: unknown): Promise<T> {
 }
 
 export async function apiPatch<T>(path: string, body: unknown): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(`${resolveBase(path)}${path}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
