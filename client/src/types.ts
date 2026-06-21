@@ -3,6 +3,7 @@ export type TaskPriority = 'LOW' | 'MEDIUM' | 'HIGH'
 
 export interface Task {
   id: string
+  projectId: string
   title: string
   description: string
   status: TaskStatus
@@ -27,7 +28,7 @@ export interface Comment {
   createdAt: string
 }
 
-export type NewTaskInput = Omit<Task, 'id' | 'status'> & { status?: TaskStatus }
+export type NewTaskInput = Omit<Task, 'id' | 'status' | 'projectId'> & { status?: TaskStatus }
 
 export type Result<T> = { success: true; data: T } | { success: false; error: string }
 

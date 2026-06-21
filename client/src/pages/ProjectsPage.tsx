@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
-import { projects } from '../data/mockProjects'
 import { useUser } from '../context/UserContext'
+import { useProjects } from '../hooks/useProjects'
 
 function ProjectsPage() {
   const { user, logout } = useUser()
+  const { projects, loading, error } = useProjects()
 
   return (
     <div className="app">
@@ -19,6 +20,8 @@ function ProjectsPage() {
       <main>
         <section>
           <h2>Projekty</h2>
+          {loading && <p>Ladowanie projektow...</p>}
+          {error && <p className="error-state">API nie jest uruchomione: {error}</p>}
           <div className="project-list">
             {projects.map((project) => (
               <Link className="project-card" to={`/projects/${project.id}`} key={project.id}>

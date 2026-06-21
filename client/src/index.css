@@ -146,6 +146,11 @@ main {
   font-style: italic;
 }
 
+.error-state {
+  color: #b42318;
+  font-weight: 600;
+}
+
 .auth-layout {
   min-height: 100vh;
   place-content: center;
