@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { z } from 'zod'
 import { requireAuth } from '../middleware/requireAuth.js'
+import { getRecentActivity, getStatusCounts } from '../services/activityService.js'
 import {
   createProject,
   getProjectForUser,
@@ -24,6 +25,18 @@ projectsRouter.get('/:id', async (req, res) => {
   const project = await getProjectForUser(req.params.id, req.user!.sub)
   if (!project) return res.status(404).json({ message: 'Projekt nie istnieje' })
   return res.json(project)
+})
+
+projectsRouter.get('/:id/stats', async (req, res) => {
+  const project = await getProjectForUser(req.params.id, req.user!.sub)
+  if (!project) return res.status(404).json({ message: 'Projekt nie istnieje' })
+
+  const [statusCounts, recentActivity] = await Promise.all([
+    getStatusCounts(project.id),
+    getRecentActivity(project.id),
+  ])
+
+  return res.json({ statusCounts, recentActivity })
 })
 
 projectsRouter.post('/', async (req, res, next) => {

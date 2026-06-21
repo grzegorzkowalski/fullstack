@@ -3,9 +3,11 @@
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import ProtectedRoute from '../../../components/ProtectedRoute'
+import ProjectStatsPanel from '../../../components/ProjectStatsPanel'
 import TaskForm from '../../../components/TaskForm'
 import TaskList from '../../../components/TaskList'
 import { useProject } from '../../../hooks/useProject'
+import { useProjectStats } from '../../../hooks/useProjectStats'
 import { useProjectTasks } from '../../../hooks/useProjectTasks'
 import type { NewTaskInput, TaskStatus } from '../../../types'
 
@@ -26,13 +28,16 @@ function ProjectDetailContent() {
     addTask,
     updateTaskStatus,
   } = useProjectTasks(projectId)
+  const stats = useProjectStats(projectId)
 
   async function handleAddTask(task: NewTaskInput) {
     await addTask(task)
+    stats.refetch()
   }
 
   async function handleTaskClick(taskId: string, currentStatus: TaskStatus) {
     await updateTaskStatus(taskId, NEXT_STATUS[currentStatus])
+    stats.refetch()
   }
 
   if (projectLoading) return <p className="hint">Ladowanie projektu...</p>
@@ -62,6 +67,7 @@ function ProjectDetailContent() {
       <section>
         <TaskForm onAddTask={handleAddTask} />
       </section>
+      <ProjectStatsPanel stats={stats.stats} loading={stats.loading} error={stats.error} />
     </>
   )
 }

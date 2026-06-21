@@ -1,5 +1,6 @@
 import type { Prisma, TaskPriority, TaskStatus } from '@prisma/client'
 import { prisma } from '../db/client.js'
+import { logActivity } from './activityService.js'
 
 export function listTasks(projectId?: string) {
   return prisma.task.findMany({
@@ -12,14 +13,14 @@ export function getTask(id: string) {
   return prisma.task.findUnique({ where: { id } })
 }
 
-export function createTask(input: {
+export async function createTask(input: {
   projectId: string
   title: string
   description?: string
   status?: TaskStatus
   priority?: TaskPriority
 }) {
-  return prisma.task.create({
+  const task = await prisma.task.create({
     data: {
       projectId: input.projectId,
       title: input.title,
@@ -28,11 +29,29 @@ export function createTask(input: {
       priority: input.priority ?? 'MEDIUM',
     },
   })
+  await logActivity(task.id, 'TASK_CREATED', {
+    title: task.title,
+    status: task.status,
+    priority: task.priority,
+  })
+  return task
 }
 
 export async function updateTask(id: string, changes: Prisma.TaskUpdateInput) {
   try {
-    return await prisma.task.update({ where: { id }, data: changes })
+    const existing = await prisma.task.findUnique({ where: { id } })
+    if (!existing) return null
+    const updated = await prisma.task.update({ where: { id }, data: changes })
+    const newStatus = typeof changes.status === 'string' ? changes.status : undefined
+
+    if (newStatus && existing.status !== newStatus) {
+      await logActivity(id, 'STATUS_CHANGED', {
+        from: existing.status,
+        to: newStatus,
+      })
+    }
+
+    return updated
   } catch {
     return null
   }

@@ -48,8 +48,12 @@ model Task {
   status      TaskStatus   @default(TODO)
   priority    TaskPriority @default(MEDIUM)
   comments    Comment[]
+  activityLogs ActivityLog[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+
+  @@index([projectId])
+  @@index([status])
 }
 
 model Comment {
@@ -60,4 +64,16 @@ model Comment {
   authorId  String
   content   String
   createdAt DateTime @default(now())
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId    String
+  action    String
+  payload   Json?
+  createdAt DateTime @default(now())
+
+  @@index([taskId])
+  @@index([createdAt])
 }

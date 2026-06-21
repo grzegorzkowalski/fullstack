@@ -27,6 +27,20 @@ export interface AuthResponse {
   user: User
 }
 
+export interface ActivityLog {
+  id: string
+  taskId: string
+  action: string
+  payload: unknown
+  createdAt: string
+  task: Pick<Task, 'id' | 'title'>
+}
+
+export interface ProjectStats {
+  statusCounts: Record<TaskStatus, number>
+  recentActivity: ActivityLog[]
+}
+
 export interface Comment {
   id: string
   taskId: string

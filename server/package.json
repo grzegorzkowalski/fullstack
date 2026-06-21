@@ -8,6 +8,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "db:seed": "tsx prisma/seed.ts",
+    "export:activity": "tsx scripts/export-activity-lake.ts",
     "start": "node dist/index.js",
     "test": "jest",
     "typecheck": "tsc --noEmit"
@@ -25,7 +26,7 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "prisma": "^7.8.0",
+    "prisma": "^6.19.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
