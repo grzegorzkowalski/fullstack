@@ -11,6 +11,7 @@ import {
 import { requireAuth } from '../middleware/requireAuth.js'
 import { createTaskSchema, updateTaskSchema } from '../validation/taskSchemas.js'
 import { z } from 'zod'
+import { summarizeText } from '../services/aiService.js'
 
 export const tasksRouter = Router()
 
@@ -62,6 +63,16 @@ tasksRouter.get('/:id/comments', async (req, res) => {
   const task = await getTask(req.params.id)
   if (!task) return res.status(404).json({ message: 'Zadanie nie istnieje' })
   return res.json(await listComments(req.params.id))
+})
+
+tasksRouter.post('/:id/summarize', async (req, res, next) => {
+  try {
+    const task = await getTask(req.params.id)
+    if (!task) return res.status(404).json({ message: 'Zadanie nie istnieje' })
+    return res.json({ summary: await summarizeText(task.description) })
+  } catch (err) {
+    return next(err)
+  }
 })
 
 tasksRouter.post('/:id/comments', async (req, res, next) => {

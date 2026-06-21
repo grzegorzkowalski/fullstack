@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import AiAssistant from '../../../components/AiAssistant'
 import ProtectedRoute from '../../../components/ProtectedRoute'
 import ProjectStatsPanel from '../../../components/ProjectStatsPanel'
 import TaskForm from '../../../components/TaskForm'
@@ -68,6 +69,7 @@ function ProjectDetailContent() {
         <TaskForm onAddTask={handleAddTask} />
       </section>
       <ProjectStatsPanel stats={stats.stats} loading={stats.loading} error={stats.error} />
+      <AiAssistant projectId={projectId} />
     </>
   )
 }

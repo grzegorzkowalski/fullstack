@@ -250,3 +250,19 @@ main {
   border-radius: 8px;
   padding: 0.75rem 0.9rem;
 }
+
+.task-actions {
+  margin-top: 0.75rem;
+}
+
+.ai-summary {
+  background: #eef1ff;
+  color: #1d2a5c;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.ai-assistant {
+  display: grid;
+  gap: 0.75rem;
+}
