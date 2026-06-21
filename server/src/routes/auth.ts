@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { Router } from 'express'
 import { signToken } from '../auth/jwt.js'
-import { createUser, findUserByEmail } from '../store/usersStore.js'
+import { createUser, findUserByEmail } from '../services/usersService.js'
 import { loginSchema, registerSchema } from '../validation/authSchemas.js'
 
 export const authRouter = Router()
@@ -15,12 +15,12 @@ authRouter.post('/register', async (req, res, next) => {
   try {
     const { email, name, password } = registerSchema.parse(req.body)
 
-    if (findUserByEmail(email)) {
+    if (await findUserByEmail(email)) {
       return res.status(409).json({ message: 'Uzytkownik z tym adresem e-mail juz istnieje' })
     }
 
     const passwordHash = await bcrypt.hash(password, 10)
-    const user = createUser({ email, name, passwordHash })
+    const user = await createUser({ email, name, passwordHash })
     return res.status(201).json(toAuthResponse(user))
   } catch (err) {
     return next(err)
@@ -30,7 +30,7 @@ authRouter.post('/register', async (req, res, next) => {
 authRouter.post('/login', async (req, res, next) => {
   try {
     const { email, password } = loginSchema.parse(req.body)
-    const user = findUserByEmail(email)
+    const user = await findUserByEmail(email)
 
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
       return res.status(401).json({ message: 'Nieprawidlowy e-mail lub haslo' })

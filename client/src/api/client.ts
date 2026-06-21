@@ -1,9 +1,8 @@
-const PROJECTS_API_BASE = '/api'
-const TASKS_API_BASE = 'http://localhost:4000'
+const API_BASE = 'http://localhost:4000'
 const TOKEN_STORAGE_KEY = 'devtrack_token'
 
 function resolveBase(path: string): string {
-  return path.startsWith('/projects') ? PROJECTS_API_BASE : TASKS_API_BASE
+  return `${API_BASE}${path}`
 }
 
 export function getToken(): string | null {
@@ -42,14 +41,14 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export async function apiGet<T>(path: string, includeAuth = true): Promise<T> {
-  const response = await fetch(`${resolveBase(path)}${path}`, {
+  const response = await fetch(resolveBase(path), {
     headers: authHeaders(includeAuth),
   })
   return handleResponse<T>(response)
 }
 
 export async function apiPost<T>(path: string, body: unknown, includeAuth = true): Promise<T> {
-  const response = await fetch(`${resolveBase(path)}${path}`, {
+  const response = await fetch(resolveBase(path), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeaders(includeAuth) },
     body: JSON.stringify(body),
@@ -58,7 +57,7 @@ export async function apiPost<T>(path: string, body: unknown, includeAuth = true
 }
 
 export async function apiPatch<T>(path: string, body: unknown, includeAuth = true): Promise<T> {
-  const response = await fetch(`${resolveBase(path)}${path}`, {
+  const response = await fetch(resolveBase(path), {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...authHeaders(includeAuth) },
     body: JSON.stringify(body),
