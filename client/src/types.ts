@@ -8,3 +8,13 @@ export interface Task {
   status: TaskStatus
   priority: TaskPriority
 }
+
+export interface Project {
+  id: string
+  name: string
+  description: string
+}
+
+export interface User {
+  name: string
+}

@@ -1,32 +1,31 @@
-import { useState } from 'react'
-import TaskForm from './components/TaskForm'
-import TaskList from './components/TaskList'
-import { initialTasks } from './data/mockTasks'
-import type { Task } from './types'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import ProtectedRoute from './components/ProtectedRoute'
+import LoginPage from './pages/LoginPage'
+import ProjectDetailPage from './pages/ProjectDetailPage'
+import ProjectsPage from './pages/ProjectsPage'
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks)
-
-  function handleAddTask(newTask: Task) {
-    setTasks((previousTasks) => [...previousTasks, newTask])
-  }
-
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>DevTrack</h1>
-        <p>Mini-system zarzadzania zadaniami projektowymi</p>
-      </header>
-      <main>
-        <section>
-          <h2>Zadania</h2>
-          <TaskList tasks={tasks} />
-        </section>
-        <section>
-          <TaskForm onAddTask={handleAddTask} />
-        </section>
-      </main>
-    </div>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route
+        path="/projects"
+        element={
+          <ProtectedRoute>
+            <ProjectsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/projects/:id"
+        element={
+          <ProtectedRoute>
+            <ProjectDetailPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to="/projects" replace />} />
+    </Routes>
   )
 }
 
