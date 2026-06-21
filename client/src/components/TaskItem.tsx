@@ -8,11 +8,15 @@ const STATUS_LABELS: Record<TaskStatus, string> = {
 
 interface TaskItemProps {
   task: Task
+  onClick?: (taskId: string, currentStatus: TaskStatus) => void
 }
 
-function TaskItem({ task }: TaskItemProps) {
+function TaskItem({ task, onClick }: TaskItemProps) {
   return (
-    <li className={`task-item priority-${task.priority.toLowerCase()}`}>
+    <li
+      className={`task-item priority-${task.priority.toLowerCase()} ${onClick ? 'clickable' : ''}`}
+      onClick={() => onClick?.(task.id, task.status)}
+    >
       <div className="task-item-main">
         <strong>{task.title}</strong>
         <span className={`status-badge status-${task.status.toLowerCase()}`}>

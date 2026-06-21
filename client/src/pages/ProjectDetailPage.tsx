@@ -1,25 +1,32 @@
 import { Link, useParams } from 'react-router-dom'
-import { useState } from 'react'
 import TaskForm from '../components/TaskForm'
 import TaskList from '../components/TaskList'
 import { projects } from '../data/mockProjects'
 import { tasksByProject } from '../data/mockTasks'
-import type { NewTaskInput, Task } from '../types'
+import { useEntityList } from '../hooks/useEntityList'
+import type { NewTaskInput, Task, TaskStatus } from '../types'
+
+const NEXT_STATUS: Record<TaskStatus, TaskStatus> = {
+  TODO: 'IN_PROGRESS',
+  IN_PROGRESS: 'DONE',
+  DONE: 'TODO',
+}
 
 function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>()
   const project = projects.find((item) => item.id === id)
-  const [tasks, setTasks] = useState<Task[]>(id ? tasksByProject[id] ?? [] : [])
+  const tasks = useEntityList<Task>(id ? tasksByProject[id] ?? [] : [])
 
   function handleAddTask(task: NewTaskInput) {
-    setTasks((previousTasks) => [
-      ...previousTasks,
-      {
-        ...task,
-        id: crypto.randomUUID(),
-        status: task.status ?? 'TODO',
-      },
-    ])
+    tasks.add({
+      ...task,
+      id: crypto.randomUUID(),
+      status: task.status ?? 'TODO',
+    })
+  }
+
+  function handleTaskClick(taskId: string, currentStatus: TaskStatus) {
+    tasks.update(taskId, { status: NEXT_STATUS[currentStatus] })
   }
 
   if (!project) {
@@ -41,7 +48,7 @@ function ProjectDetailPage() {
       <main>
         <section>
           <h2>Zadania projektu</h2>
-          <TaskList tasks={tasks} />
+          <TaskList tasks={tasks.items} onTaskClick={handleTaskClick} />
         </section>
         <section>
           <TaskForm onAddTask={handleAddTask} />

@@ -96,6 +96,15 @@ main {
   margin-bottom: 0;
 }
 
+.task-item.clickable {
+  cursor: pointer;
+}
+
+.task-item.clickable:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
+}
+
 .status-badge {
   flex: 0 0 auto;
   font-size: 0.75rem;
