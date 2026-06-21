@@ -15,3 +15,10 @@ export interface Project {
   name: string
   description: string
 }
+
+export interface User {
+  id: string
+  email: string
+  name: string
+  passwordHash: string
+}

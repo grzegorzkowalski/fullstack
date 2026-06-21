@@ -42,6 +42,15 @@ button:hover {
   background: #1d40c4;
 }
 
+.secondary-button {
+  background: #eef1ff;
+  color: #1d40c4;
+}
+
+.secondary-button:hover {
+  background: #dde4ff;
+}
+
 input,
 textarea,
 select {

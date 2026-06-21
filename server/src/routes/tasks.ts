@@ -6,9 +6,12 @@ import {
   listTasks,
   updateTask,
 } from '../store/tasksStore.js'
+import { requireAuth } from '../middleware/requireAuth.js'
 import { createTaskSchema, updateTaskSchema } from '../validation/taskSchemas.js'
 
 export const tasksRouter = Router()
+
+tasksRouter.use(requireAuth)
 
 tasksRouter.get('/', (req, res) => {
   const projectId = typeof req.query.projectId === 'string' ? req.query.projectId : undefined
