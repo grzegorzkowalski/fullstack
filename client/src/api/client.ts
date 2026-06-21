@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:4000'
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
 const TOKEN_STORAGE_KEY = 'devtrack_token'
 
 function resolveBase(path: string): string {

@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: devtrack
+      POSTGRES_PASSWORD: devtrack
+      POSTGRES_DB: devtrack
+    ports:
+      - '5432:5432'
+    volumes:
+      - devtrack_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U devtrack']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  server:
+    build: ./server
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://devtrack:devtrack@db:5432/devtrack
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-change-me}
+      PORT: 4000
+    ports:
+      - '4000:4000'
+
+  client:
+    build:
+      context: ./client
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:4000
+    depends_on:
+      - server
+    ports:
+      - '3000:3000'
+
+volumes:
+  devtrack_pg_data:
