@@ -1,33 +1,10 @@
-# DevTrack — zbuduj projekt od zera (15 zadań, TypeScript od startu)
-
-To jest wersja instrukcji budowy projektu DevTrack w formacie ćwiczeń: każdy
-checkpoint to jedno **Zadanie** z opisem, instrukcją (krokami **bez** pokazanego
-kodu) i ukrytym fragmentem gotowego kodu, który możesz odsłonić, gdy chcesz
-porównać swoje rozwiązanie albo się zablokujesz.
+# DevTrack — zbuduj projekt od zera
 
 **Zasada pracy:** najpierw przeczytaj „Opis zadania” i „Instrukcję”, spróbuj
 napisać kod samodzielnie, a dopiero potem kliknij **„📄 Pokaż gotowy kod”**.
 Polecenia terminala (`npm install`, `git commit` itd.) są zawsze widoczne —
 to nie jest „rozwiązanie”, tylko mechanika, którą i tak musisz wykonać.
 
-**Zmiana względem poprzedniej wersji tej instrukcji:** projekt frontendowy
-stawiamy od razu oficjalnym generatorem Vite z szablonem `react-ts` i piszemy
-**od pierwszej linijki w TypeScript** — bez etapu „najpierw JS, potem
-migracja”. To bardziej realistyczna ścieżka (tak zaczyna się większość nowych
-projektów React). Jeśli porównujesz się ze starszą wersją repozytorium
-referencyjnego: w **Zadaniach 1–4** zobaczysz różnice w nazwach plików
-(`.tsx` od początku, a nie `.jsx`→`.tsx` po drodze) i nieco inny podział
-treści (Zadanie 4 nie jest już „migracją”, tylko ćwiczeniem z typów
-zaawansowanych). Od **Zadania 5** kod powinien znów zbiegać się do tego
-samego stanu co w repo referencyjnym.
-
-**Walidacja względem repozytorium referencyjnego** (jeśli masz pliki z poprzedniej
-wersji projektu rozpakowane w `~/devtrack-reference`):
-```bash
-git -C ~/devtrack-reference checkout checkpoint-XX
-diff -rq --exclude=node_modules --exclude=.next --exclude=dist \
-  --exclude=.git --exclude=package-lock.json ~/devtrack ~/devtrack-reference
-```
 
 ---
 
@@ -35,25 +12,19 @@ diff -rq --exclude=node_modules --exclude=.next --exclude=dist \
 
 ### Opis zadania
 
-Postawisz projekt React + TypeScript za pomocą oficjalnego generatora Vite —
-to jest dokładnie to, co zrobiłbyś/abyś, zaczynając prawdziwy projekt od zera.
-Generator daje Ci już gotowy `tsconfig.json`, `vite.config.ts` i całą
-konfigurację TypeScript — Twoja praca to zrozumieć, co dostałeś/aś, posprzątać
-domyślną zawartość (licznik kliknięć z szablonu) i zastąpić ją własnym
-komponentem. Na końcu zrobisz pierwszy commit i nauczysz się podstawowego
-przepływu pracy z Git (branch → commit → PR).
+Na start tworzysz pusty projekt React z TypeScriptem. Korzystasz z Vite, więc większość konfiguracji dostajesz od razu. Twoim zadaniem jest uruchomić projekt, usunąć przykładowy ekran i wstawić prostą stronę startową DevTrack.
 
 ### Instrukcja
 
-1. Wygeneruj projekt poleceniem `npm create vite@latest` z szablonem `react-ts`, w katalogu `client`.
-2. Zainstaluj zależności i odpal `npm run dev` — sprawdź w przeglądarce domyślną stronę szablonu (licznik kliknięć).
-3. Obejrzyj wygenerowaną strukturę: `tsconfig.json`, `tsconfig.node.json`, `vite.config.ts`, `src/main.tsx`, `src/App.tsx`, `src/vite-env.d.ts`. Zwróć uwagę, że `strict: true` jest już włączone domyślnie.
-4. Usuń domyślną zawartość szablonu: licznik kliknięć w `App.tsx`, plik `src/App.css`, grafiki `src/assets/react.svg` i `public/vite.svg` (chyba że chcesz je zostawić — to nieistotne dla dalszych zadań).
-5. Zastąp zawartość `App.tsx` własnym komponentem: nagłówek „DevTrack” i krótki opis projektu.
-6. Uprość `index.css` do własnych, podstawowych stylów (kolory, czcionka, kontener `.app`) — możesz zostawić jeden plik CSS i usunąć `App.css`, jeśli wolisz prostszą strukturę.
-7. W katalogu głównym repo (jeden poziom **nad** `client/`) dodaj `.gitignore` (m.in. `node_modules/`, `dist/`, `.env`).
-8. Zainicjuj repo Git w katalogu głównym (jeśli jeszcze nie istnieje), zrób pierwszy commit i otaguj go jako `checkpoint-01`.
-9. **Ćwiczenie z Git:** utwórz nowy branch, zmień podtytuł aplikacji, zrób commit, wypchnij branch i otwórz Pull Request do `main`.
+1. W katalogu głównym utwórz aplikację `client` z szablonu Vite `react-ts`.
+2. Wejdź do `client`, zainstaluj zależności i uruchom aplikację lokalnie.
+3. Otwórz wygenerowane pliki i sprawdź, gdzie jest główny komponent aplikacji.
+4. Usuń przykładowy licznik, logo i style z szablonu.
+5. W `App.tsx` pokaż nagłówek `DevTrack` i krótki opis projektu.
+6. Uprość style w jednym pliku CSS.
+7. W katalogu głównym dodaj `.gitignore`.
+8. Zrób pierwszy commit i tag `checkpoint-01`.
+9. Dodatkowo przećwicz Git: utwórz branch, zmień krótki tekst, zrób commit i przygotuj PR.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -221,24 +192,21 @@ git tag checkpoint-01
 
 ### Opis zadania
 
-Zbudujesz pierwszą realną funkcjonalność aplikacji: listę zadań i formularz
-dodawania nowych. Skupisz się na podziale na komponenty (kontener vs.
-komponenty prezentacyjne) i przepływie danych przez propsy — **od razu z
-pełnym typowaniem TypeScript**, bez etapu „najpierw na czysto, potem typy”.
-Tworzysz tu również pierwszy centralny plik z typami domenowymi.
+Dodajesz pierwszą prawdziwą funkcję: listę zadań i formularz dodawania. Przy okazji dzielisz widok na mniejsze komponenty i od razu typujesz dane w TypeScripcie.
 
 ### Instrukcja
 
-1. Stwórz plik `types.ts` z typami domenowymi: `TaskStatus` i `TaskPriority` jako unie literałów stringowych (`'TODO' | 'IN_PROGRESS' | 'DONE'` itd.) oraz interfejs `Task` (`id`, `title`, `description`, `status`, `priority`).
-2. Stwórz plik z danymi mockowymi: tablica 3 przykładowych zadań typu `Task[]`.
-3. Stwórz komponent `TaskItem` z otypowanym propsem `{ task: Task }` — wyświetla tytuł, opis i kolorowy „badge” statusu (np. `Record<TaskStatus, string>` na etykiety).
-4. Stwórz komponent `TaskList` z propsem `{ tasks: Task[] }` — renderuje listę `TaskItem`, a gdy tablica jest pusta, pokazuje komunikat „Brak zadań”.
-5. Stwórz komponent `TaskForm` z propsem `{ onAddTask: (task: Task) => void }`. Stan formularza w `useState` (z typowanym `useState<TaskPriority>('MEDIUM')` dla priorytetu). Handler `onSubmit` typu `FormEvent<HTMLFormElement>`, wywołuje `onAddTask` z nowym obiektem `Task` (`id` z `crypto.randomUUID()`, status domyślny `TODO`), czyści pola.
-6. W komponencie `App`: `useState<Task[]>(initialTasks)`, funkcja dodająca nowe zadanie, renderuje `TaskList` i `TaskForm`.
-7. Dodaj style dla nowych elementów.
-8. Sprawdź `npx tsc --noEmit` (zero błędów) i `npm run build`, zrób commit i tag `checkpoint-02`.
+1. Dodaj typy `TaskStatus`, `TaskPriority` i `Task` w `types.ts`.
+2. Przygotuj plik z trzema przykładowymi zadaniami.
+3. Stwórz `TaskItem`, który pokazuje tytuł, opis i status zadania.
+4. Stwórz `TaskList`, który renderuje listę albo komunikat o braku zadań.
+5. Stwórz `TaskForm` z polami: tytuł, opis i priorytet.
+6. Po wysłaniu formularza dodaj nowe zadanie do stanu w `App`.
+7. Dodaj proste style dla listy, formularza, statusów i priorytetów.
+8. Uruchom typecheck oraz build.
+9. Zrób commit i tag `checkpoint-02`.
 
-**Zadanie dodatkowe:** dodaj możliwość oznaczenia zadania jako „zrobione” po kliknięciu (przekazanie typowanej funkcji-handlera z `App` do `TaskItem`, przez `TaskList`).
+**Dla chętnych:** dodaj kliknięcie zadania, które oznacza je jako zrobione.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -514,22 +482,21 @@ git tag checkpoint-02
 
 ### Opis zadania
 
-Aplikacja dostanie kilka „stron” (logowanie, lista projektów, szczegóły
-projektu) połączonych routingiem po stronie klienta (`react-router-dom`),
-oraz globalny stan informujący, kto jest zalogowany — zarządzany przez React
-Context, w pełni otypowany od pierwszej linijki.
+Aplikacja dostaje kilka ekranów: logowanie, listę projektów i szczegóły projektu. Dodajesz też prosty globalny stan użytkownika, żeby można było chronić wybrane trasy.
 
 ### Instrukcja
 
-1. Zainstaluj `react-router-dom` (wersja 6).
-2. Dodaj do `types.ts` interfejsy `Project` (`id`, `name`, `description`) i `User` (`name`).
-3. Stwórz dane mockowe projektów (`Project[]`, 2 projekty) i przebuduj dane zadań na `Record<string, Task[]>` pogrupowane po `projectId`.
-4. Stwórz `UserContext`: typ `UserContextValue` (`{ user: User | null, login: (name: string) => void, logout: () => void }`), `createContext<UserContextValue | null>(null)`, provider z `useState<User | null>(null)`, hook `useUser()` rzucający błąd, gdy użyty poza providerem.
-5. Stwórz komponent `ProtectedRoute` z propsem `{ children: ReactNode }` — przekierowuje na `/login`, jeśli `user` jest `null`.
-6. Stwórz stronę `LoginPage` — formularz z jednym polem (imię), typowany handler submitu, po wysłaniu `login(name)` + `navigate('/projects')`.
-7. Stwórz stronę `ProjectsPage` — lista projektów jako linki, przycisk wylogowania.
-8. Stwórz stronę `ProjectDetailPage` — `useParams<{ id: string }>()`, `useState<Task[]>` zainicjalizowany danymi z mocka dla danego `id`.
-9. Skonfiguruj routing w `App.tsx` (`/login`, `/projects`, `/projects/:id` — dwie ostatnie w `ProtectedRoute`), opakuj całość w `BrowserRouter` i `UserProvider` w `main.tsx`.
+1. Zainstaluj `react-router-dom`.
+2. Dodaj typy `Project` i `User`.
+3. Przygotuj mocki projektów i zadania przypisane do projektu.
+4. Dodaj `UserContext` z funkcjami `login` i `logout`.
+5. Stwórz `ProtectedRoute`, który wpuszcza tylko zalogowanego użytkownika.
+6. Dodaj stronę logowania z jednym polem na imię.
+7. Dodaj stronę projektów z linkami do szczegółów.
+8. Dodaj stronę szczegółów projektu z listą zadań i formularzem.
+9. Skonfiguruj routing w `App.tsx`.
+10. Owiń aplikację w `BrowserRouter` i `UserProvider`.
+11. Uruchom sprawdzenie projektu i zrób commit z tagiem `checkpoint-03`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -836,19 +803,18 @@ git tag checkpoint-03
 
 ### Opis zadania
 
-Skoro piszesz w TypeScript od pierwszej linijki, to zadanie nie jest już
-„migracją” — jest **pogłębieniem**. Poćwiczysz typy narzędziowe (`Omit`,
-`Partial`, `Pick`), typy dyskryminowane i dokręcenie konfiguracji kompilatora,
-refaktoryzując kod, który już masz. To jest realna umiejętność: czytanie i
-poprawianie istniejących typów, a nie tylko pisanie nowych od zera.
+Porządkujesz typy i ćwiczysz kilka narzędzi TypeScript, które często pojawiają się w prawdziwych projektach. To mały refactor, bez dużej zmiany działania aplikacji.
 
 ### Instrukcja
 
-1. W `types.ts` zdefiniuj `NewTaskInput` jako `Omit<Task, 'id' | 'status'> & { status?: TaskStatus }` — typ danych wejściowych do tworzenia zadania (bez `id`, ze statusem opcjonalnym). Zastanów się, gdzie w `TaskForm` mógłbyś użyć tego typu zamiast pisać pola formularza „z palca”.
-2. Dodaj typ `Comment` (`id`, `taskId`, `author`, `content`, `createdAt`) — nie używasz go jeszcze, przyda się w Zadaniu 10.
-3. Przejrzyj `tsconfig.json` wygenerowany przez Vite (Zadanie 1) — sprawdź, czy `noUnusedLocals` i `noUnusedParameters` są włączone (Vite 5 włącza je domyślnie). Spróbuj uruchomić `npx tsc --noEmit` po dodaniu jakiejś nieużywanej zmiennej w kodzie — zobacz, jak kompilator reaguje.
-4. Poćwicz typy dyskryminowane: napisz (na boku, niekoniecznie w aplikacji) mały przykład typu `type Result<T> = { success: true; data: T } | { success: false; error: string }` i funkcję, która go zwraca — to wzorzec, który zobaczysz ponownie przy obsłudze odpowiedzi API w Zadaniu 6.
-5. Sprawdź, czy wszystkie pliki komponentów konsekwentnie korzystają z typów z `types.ts` (a nie duplikują definicji pól ad-hoc) — to dobry moment na małe refaktoryzacje, jeśli coś przegapiłeś/aś w Zadaniach 2–3.
+1. Dodaj `NewTaskInput`, czyli typ danych potrzebnych do utworzenia zadania.
+2. Dodaj typ `Comment`, który przyda się później przy bazie danych.
+3. Sprawdź, czy `tsconfig.json` ma włączone ścisłe sprawdzanie typów.
+4. Dodaj prosty przykład typu `Result<T>` i funkcji zwracającej sukces albo błąd.
+5. Upewnij się, że komponenty korzystają ze wspólnych typów z `types.ts`.
+6. Popraw miejsca, gdzie typy są powielone albo wpisane ręcznie.
+7. Uruchom typecheck i build.
+8. Zrób commit oraz tag `checkpoint-04`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -904,16 +870,19 @@ git tag checkpoint-04
 
 ### Opis zadania
 
-Napiszesz swój pierwszy **generyczny** custom hook — uniwersalny mechanizm
-do zarządzania listą elementów z `id`, który zadziała dla zadań, a w
-przyszłości dla czegokolwiek innego, co ma pole `id`. Dodasz też nową
-funkcję aplikacji: kliknięcie zadania cyklicznie zmienia jego status.
+Dodajesz własny hook do pracy z listą elementów. Potem używasz go przy zadaniach i dodajesz prostą interakcję: kliknięcie zadania zmienia jego status.
 
 ### Instrukcja
 
-1. Stwórz hook `useEntityList<T extends { id: string }>(initial: T[])`, który zwraca: `items`, oraz funkcje `add(item)`, `remove(id)`, `update(id, changes: Partial<T>)`. To ćwiczenie z generyków — funkcja musi działać dla *jakiegokolwiek* typu `T`, o ile ma pole `id`.
-2. Zmień `TaskItem` i `TaskList`, żeby przyjmowały opcjonalny prop-funkcję (`onClick`/`onTaskClick`) o sygnaturze `(taskId: string, currentStatus: TaskStatus) => void`. Gdy jest podana, element listy powinien mieć inny styl (np. kursor wskazujący klikalność).
-3. W `ProjectDetailPage`: zamień ręczny `useState` na Twój nowy `useEntityList`. Napisz mapę `NEXT_STATUS: Record<TaskStatus, TaskStatus>` (TODO→IN_PROGRESS→DONE→TODO) i funkcję, która po kliknięciu zadania wywołuje `update` z nowym statusem.
+1. Stwórz hook `useEntityList<T extends { id: string }>`.
+2. Hook ma zwracać listę oraz funkcje `add`, `remove` i `update`.
+3. Dodaj do `TaskItem` opcjonalny handler kliknięcia.
+4. Przekaż handler przez `TaskList`.
+5. W szczegółach projektu użyj `useEntityList` zamiast ręcznego `useState`.
+6. Dodaj mapę kolejnych statusów: `TODO`, `IN_PROGRESS`, `DONE`.
+7. Po kliknięciu zadania ustaw następny status.
+8. Dodaj delikatny styl dla klikalnego zadania.
+9. Sprawdź projekt i zrób commit z tagiem `checkpoint-05`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -1070,20 +1039,20 @@ git tag checkpoint-05
 
 ### Opis zadania
 
-Dane mockowe trzymane w kodzie zamienisz na prawdziwe (na razie testowe)
-REST API. Nauczysz się wzorca `fetch` + `async/await` + stany `loading`/`error`
-w custom hookach — to jest najważniejszy, najczęściej powtarzany wzorzec w
-aplikacjach React korzystających z backendu.
+Zadania przestają być trzymane tylko w kodzie. Podłączasz aplikację do prostego REST API i dodajesz obsługę ładowania oraz błędów.
 
 ### Instrukcja
 
-1. Zainstaluj `json-server` jako narzędzie deweloperskie — symuluje REST API na podstawie pliku JSON.
-2. Dodaj do typu `Task` pole `projectId: string`. Usuń pliki z mockami (`mockProjects.ts`, `mockTasks.ts`) — dane przenosisz do pliku `db.json` (struktura: `{ "projects": [...], "tasks": [...] }`, każde zadanie z polem `projectId`).
-3. Stwórz lekki wrapper na `fetch`: funkcje `apiGet`, `apiPost`, `apiPatch`, każda budująca URL z bazowego adresu (`http://localhost:4000`) i ścieżki, parsująca JSON, oraz rzucająca własny błąd (`ApiError`) gdy odpowiedź nie jest „ok”.
-4. Stwórz trzy custom hooki: `useProjects()` (lista projektów), `useProject(id)` (jeden projekt), `useProjectTasks(projectId)` (zadania projektu + funkcje `addTask`, `updateTaskStatus`). Każdy: stan `data`/`loading`/`error`, `useEffect` z funkcją `async`, `try/catch/finally`.
-5. Zaktualizuj strony (`ProjectsPage`, `ProjectDetailPage`), żeby korzystały z tych hooków zamiast statycznych importów, i wyświetlały komunikat podczas wczytywania oraz w razie błędu (np. „API nie jest uruchomione”).
-6. Dodaj do `package.json` skrypt startujący `json-server` na porcie 4000, wskazujący na `db.json`.
-7. Uruchom dwa procesy równolegle (mock API + aplikacja) i sprawdź w przeglądarce, że dane się wczytują.
+1. Zainstaluj `json-server` jako narzędzie deweloperskie.
+2. Dodaj `projectId` do typu `Task`.
+3. Przenieś dane projektów i zadań do `db.json`.
+4. Stwórz prosty wrapper na `fetch`: `apiGet`, `apiPost`, `apiPatch`.
+5. Dodaj własny błąd `ApiError` dla nieudanych odpowiedzi.
+6. Napisz hooki `useProjects`, `useProject` i `useProjectTasks`.
+7. W hookach obsłuż `loading`, `error` i dane.
+8. Przepisz strony, żeby korzystały z hooków zamiast importów mocków.
+9. Dodaj skrypt startujący mock API na porcie 4000.
+10. Uruchom typecheck, build, a potem zrób commit i tag `checkpoint-06`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -1218,24 +1187,21 @@ git tag checkpoint-06
 
 ### Opis zadania
 
-Przeniesiesz aplikację z Vite + React Router na Next.js z App Routerem.
-To duża zmiana strukturalna: routing staje się plikowy (struktura katalogów
-`app/` *jest* routingiem), a Next.js daje pierwszy, wbudowany sposób na
-napisanie backendu — Route Handlery.
+Przenosisz frontend z Vite do Next.js. Routing nie będzie już ustawiany ręcznie w React Routerze, tylko przez pliki w katalogu `app`. Dodajesz też pierwszy mały backend w Next.js.
 
 ### Instrukcja
 
-1. Zainstaluj `next`, usuń `vite` i `@vitejs/plugin-react`.
-2. Usuń pliki specyficzne dla Vite (`vite.config.ts`, `index.html`, `main.tsx`, `App.tsx`, cały katalog `pages/`).
-3. Stwórz strukturę `src/app/` z podkatalogami `login/`, `projects/[id]/`, `api/projects/[id]/`.
-4. Zaktualizuj `package.json` (skrypty `next dev`/`next build`/`next start`), stwórz `next.config.js`, nowy `tsconfig.json` w wersji dla Next.js (z pluginem `next`, `jsx: "preserve"`).
-5. Przenieś `index.css` do `app/globals.css`.
-6. Stwórz pierwszy „backend” aplikacji: Route Handler `GET /api/projects` (zwraca mockowaną tablicę projektów) i `GET /api/projects/[id]` (jeden projekt po `id`, `404` gdy nie istnieje).
-7. Stwórz `app/layout.tsx` (układ wspólny: nagłówek + opakowanie w providery), `app/page.tsx` (przekierowanie na `/projects`), `app/providers.tsx` (komponent kliencki opakowujący `UserProvider`).
-8. Przepisz strony z dawnego `pages/` na konwencję App Router: `app/login/page.tsx`, `app/projects/page.tsx`, `app/projects/[id]/page.tsx`. Zamień `react-router-dom` na `next/link` (komponent `Link`) i `next/navigation` (`useRouter`, `useParams`).
-9. Przepisz `ProtectedRoute`: zamiast `<Navigate>` użyj `useRouter().replace('/login')` wewnątrz `useEffect`.
-10. Każdy komponent korzystający z hooków/Contextu/zdarzeń musi mieć na początku pliku dyrektywę `'use client'` (Next.js domyślnie renderuje komponenty po stronie serwera).
-11. Zaktualizuj `api/client.ts`: rozróżnij dwie bazy adresów — wewnętrzne Route Handlery Next.js (`/api`, dla projektów) i zewnętrzne testowe API (`http://localhost:4000`, dla zadań — to się zmieni w następnym zadaniu).
+1. Zainstaluj `next` i usuń zależności Vite.
+2. Usuń pliki, które były potrzebne tylko w Vite.
+3. Utwórz strukturę `src/app` z podstronami `login`, `projects` i `projects/[id]`.
+4. Przenieś globalne style do `app/globals.css`.
+5. Dodaj `layout.tsx`, `page.tsx` i `providers.tsx`.
+6. Dodaj Route Handlery dla listy projektów i szczegółów projektu.
+7. Przepisz strony na App Router.
+8. Zamień `react-router-dom` na `next/link` i `next/navigation`.
+9. Dopisz `'use client'` w komponentach z hookami, zdarzeniami albo Contextem.
+10. Zaktualizuj klienta API: projekty idą przez `/api`, zadania jeszcze przez port 4000.
+11. Uruchom typecheck, build i zrób commit z tagiem `checkpoint-07`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -1435,23 +1401,22 @@ git tag checkpoint-07
 
 ### Opis zadania
 
-Zbudujesz samodzielny, niezależny od Next.js serwer Express — pierwszy
-prawdziwy backend tego projektu. Skupisz się na strukturze typowego API
-(routing, walidacja danych wejściowych, centralna obsługa błędów).
+Tworzysz osobny backend w Expressie. Od tego momentu zadania obsługuje samodzielne API, a nie mockowany serwer JSON.
 
 ### Instrukcja
 
-1. Stwórz nowy folder `server/` (osobny projekt npm, niezależny od `client/`). Ustaw `"type": "module"` w `package.json`.
-2. Zainstaluj `express`, `cors`, `zod` (walidacja) jako dependencies, oraz `typescript`, `tsx` (do uruchamiania TS bez kompilacji), typy `@types/*` jako devDependencies.
-3. Stwórz `tsconfig.json` dla backendu (`module: "ESNext"`, `target: "ES2022"`, `strict: true`).
-4. Zdefiniuj typy domenowe (te same co po stronie klienta: `TaskStatus`, `TaskPriority`, `Task`, `Project`).
-5. Stwórz magazyn danych w pamięci procesu (tablica `Task[]`) z funkcjami: `listTasks(projectId?)`, `getTask(id)`, `createTask(input)`, `updateTask(id, changes)`, `deleteTask(id)`.
-6. Stwórz schematy walidacji Zod: jeden dla tworzenia zadania (wymaga `projectId`, `title`; resztę domyślnie ustawia), jeden dla aktualizacji (wszystkie pola opcjonalne, ale wymagaj co najmniej jednego — to dobre zastosowanie `.refine()`).
-7. Stwórz centralny middleware obsługi błędów: błędy walidacji Zod → `400` z listą problemów; każdy inny błąd → `500`.
-8. Stwórz router zasobu `Task` z pełnym CRUD: `GET /`, `GET /:id`, `POST /`, `PATCH /:id`, `DELETE /:id`.
-9. Złóż wszystko w punkcie wejścia: `cors()`, `express.json()`, endpoint `/health`, montaż routera pod `/tasks`, middleware błędów na końcu, `app.listen`.
-10. Zaktualizuj klienta: usuń `db.json` i `json-server` — `TASKS_API_BASE` ma teraz wskazywać na Twój własny serwer (ten sam port 4000, więc kod hooków się nie zmienia).
-11. Przetestuj ręcznie przez `curl` (albo Postman/Insomnia) każdy endpoint, łącznie z przypadkami błędów (np. `POST` bez tytułu powinien dać `400`).
+1. Utwórz katalog `server` jako osobny projekt npm.
+2. Zainstaluj `express`, `cors` i `zod`.
+3. Dodaj TypeScript, `tsx` i potrzebne typy jako dev dependencies.
+4. Przygotuj `tsconfig.json` dla backendu.
+5. Dodaj typy domenowe po stronie serwera.
+6. Stwórz prosty magazyn zadań w pamięci procesu.
+7. Dodaj schematy Zod do tworzenia i aktualizacji zadania.
+8. Dodaj middleware do obsługi błędów.
+9. Stwórz router `/tasks` z pełnym CRUD.
+10. Dodaj `/health`, CORS i `express.json()` w pliku startowym.
+11. Usuń `json-server` z klienta.
+12. Sprawdź backend i frontend, zrób commit oraz tag `checkpoint-08`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -1667,22 +1632,22 @@ git tag checkpoint-08
 
 ### Opis zadania
 
-Zamienisz mockowe „logowanie samą nazwą” na prawdziwy mechanizm: rejestracja
-z hashowanym hasłem, logowanie zwracające token JWT, i middleware chroniący
-endpointy, do których powinni mieć dostęp tylko zalogowani użytkownicy.
+Dodajesz normalne logowanie. Użytkownik rejestruje konto, loguje się hasłem, dostaje token JWT i dopiero z tym tokenem może korzystać z chronionych endpointów.
 
 ### Instrukcja
 
-1. Zainstaluj `bcryptjs` (hashowanie haseł) i `jsonwebtoken` (tokeny JWT) w `server/`.
-2. Stwórz magazyn użytkowników w pamięci (`id`, `email`, `name`, `passwordHash`) z funkcjami `findUserByEmail`, `createUser`.
-3. Stwórz moduł JWT: funkcję podpisującą token (`signToken`, z payloadem `sub`/`email`/`name`) i weryfikującą (`verifyToken`). Sekret czytaj ze zmiennej środowiskowej z wartością domyślną na potrzeby developmentu.
-4. Stwórz schematy walidacji rejestracji (e-mail, imię, hasło min. 8 znaków) i logowania.
-5. Stwórz router `auth`: `POST /register` (sprawdza duplikat e-maila → `409`, hashuje hasło, zwraca token+usera), `POST /login` (porównuje hash hasła, `401` przy niezgodności).
-6. Stwórz middleware `requireAuth`: czyta nagłówek `Authorization: Bearer <token>`, weryfikuje go, ustawia `req.user`; brak/błędny token → `401`.
-7. Zamontuj `requireAuth` jako middleware na **całym** routerze `tasks` (`tasksRouter.use(requireAuth)`).
-8. Po stronie klienta: zmień typ `User` na `{ id, email, name }`, dodaj `AuthResponse`. Przepisz `UserContext`: `login`/`register` jako funkcje `async` wołające odpowiednie endpointy, zapisujące token w `localStorage`; przy starcie aplikacji odtwórz sesję z `localStorage` (z flagą `loading`, żeby `ProtectedRoute` nie przekierowywał, zanim sesja się odtworzy).
-9. W kliencie dodaj do każdego żądania (`apiGet`/`apiPost`/`apiPatch`) nagłówek `Authorization`, jeśli token istnieje.
-10. Przepisz stronę logowania na formularz e-mail/hasło, z przełącznikiem logowanie ↔ rejestracja.
+1. W serwerze zainstaluj `bcryptjs` i `jsonwebtoken`.
+2. Dodaj tymczasowy magazyn użytkowników w pamięci.
+3. Dodaj funkcje do tworzenia i sprawdzania tokenów JWT.
+4. Dodaj schematy walidacji rejestracji i logowania.
+5. Stwórz router `/auth` z endpointami `register` i `login`.
+6. Dodaj middleware `requireAuth`.
+7. Zabezpiecz router zadań tokenem.
+8. W kliencie zmień `User` na `id`, `email`, `name`.
+9. Zapisuj token i użytkownika w `localStorage`.
+10. Dodawaj nagłówek `Authorization` do zapytań API.
+11. Przepisz stronę logowania na formularz email/hasło z trybem rejestracji.
+12. Uruchom testy/buildujące komendy i zrób commit z tagiem `checkpoint-09`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -1842,23 +1807,22 @@ git tag checkpoint-09
 
 ### Opis zadania
 
-Magazyny danych w pamięci procesu (które tracą dane po każdym restarcie)
-zamienisz na prawdziwą bazę relacyjną — PostgreSQL — obsługiwaną przez
-Prisma ORM. To największy skok jakościowy w projekcie: dane wreszcie
-przetrwają restart serwera, a relacje (projekt → zadania → komentarze)
-będą wymuszone na poziomie bazy danych.
+Zamieniasz dane trzymane w pamięci na prawdziwą bazę PostgreSQL obsługiwaną przez Prisma. Dzięki temu dane nie znikają po restarcie serwera.
 
 ### Instrukcja
 
-1. Zainstaluj `@prisma/client` (dependency) i `prisma` (CLI, devDependency).
-2. Zaprojektuj `schema.prisma`: modele `User`, `Project`, `Task` (z enumami `TaskStatus`, `TaskPriority`), `Comment`. Zastanów się nad relacjami: kto jest właścicielem projektu? Kto jest autorem komentarza? Co się dzieje z zadaniami, gdy usuniesz projekt (kaskadowe usuwanie)?
-3. Skonfiguruj `DATABASE_URL` w `.env` (jeśli nie masz lokalnego PostgreSQL, odpal go w Dockerze jednorazowym poleceniem `docker run postgres:16`).
-4. Wygeneruj klienta Prisma i pierwszą migrację.
-5. Napisz skrypt seedujący: tworzy jednego użytkownika demo, dwa projekty, kilka zadań.
-6. Zastąp dotychczasowe magazyny w pamięci (`usersStore`, `tasksStore`) warstwą **serwisów** — funkcje o tych samych nazwach/sygnaturach co poprzednio, ale wołające `prisma.<model>.findMany/create/update/delete` zamiast operacji na tablicy.
-7. Dodaj router `projects`: lista i szczegóły projektu **filtrowane po właścicielu** (na podstawie `req.user.sub` z tokenu), tworzenie nowego projektu.
-8. Dodaj do routera zadań endpointy komentarzy (`GET`/`POST /tasks/:id/comments`).
-9. Po stronie klienta: usuń mockowe Route Handlery Next.js z Zadania 7 — od teraz **cały** backend to Twój serwer Express+Prisma, jedna baza adresu API.
+1. Zainstaluj `@prisma/client` i CLI `prisma`.
+2. Dodaj `schema.prisma` z modelami `User`, `Project`, `Task` i `Comment`.
+3. Dodaj enumy statusu i priorytetu zadania.
+4. Przygotuj `.env.example` z `DATABASE_URL`.
+5. Wygeneruj klienta Prisma.
+6. Dodaj migrację startową i seed z danymi demo.
+7. Zastąp store w pamięci serwisami opartymi o Prisma.
+8. Dodaj router `/projects` filtrowany po zalogowanym użytkowniku.
+9. Dodaj endpointy komentarzy dla zadań.
+10. Usuń mockowe API projektów z Next.js.
+11. Sprawdź typecheck i build po obu stronach.
+12. Zrób commit oraz tag `checkpoint-10`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -2040,28 +2004,22 @@ git tag checkpoint-10
 
 ### Opis zadania
 
-Napiszesz pierwsze testy automatyczne — po stronie klienta (komponenty,
-hooki) i serwera (walidacja, JWT, routery). Dla testów serwera zastosujesz
-ważną technikę: mockowanie warstwy serwisów, żeby testować logikę API **bez**
-potrzeby prawdziwej bazy danych.
+Dodajesz pierwsze testy. Testujesz małe kawałki frontendu i backendu, żeby szybciej łapać błędy po zmianach.
 
 ### Instrukcja
 
-**Klient:**
-1. Zainstaluj `jest`, `jest-environment-jsdom`, `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`.
-2. Skonfiguruj Jest przez wbudowany helper `next/jest`.
-3. Napisz testy komponentu `TaskItem`: renderowanie treści, wywołanie `onClick` z poprawnymi argumentami po kliknięciu, brak klasy „klikalny” bez przekazanego handlera.
-4. Napisz testy `TaskList`: renderowanie listy i empty state.
-5. Napisz testy `TaskForm`: wypełnienie i wysłanie formularza wywołuje `onAddTask` z poprawnym obiektem i czyści pola; pusty tytuł nie wywołuje callbacku.
-6. Napisz test generycznego hooka `useEntityList` (`add`/`update`/`remove`) za pomocą `renderHook`.
-
-**Serwer:**
-1. Zainstaluj `jest`, `ts-jest`, `supertest`, odpowiednie typy.
-2. Skonfiguruj `ts-jest` z osobnym `tsconfig` (kompilacja do CommonJS na potrzeby testów) — zwróć uwagę, że plik konfiguracyjny Jest musi mieć rozszerzenie `.cjs`, bo główny `package.json` ma `"type": "module"`.
-3. Wydziel konfigurację Express (`app.ts`, bez `app.listen`) z punktu startowego (`index.ts`, tylko `import { app }` + `listen`) — to pozwala `supertest` zaimportować `app` bez faktycznego startowania serwera.
-4. Napisz testy walidacji Zod (przypadki poprawne i błędne) i modułu JWT (`signToken`/`verifyToken`).
-5. Napisz test middleware błędów (poprawna obsługa `ZodError` i błędu generycznego).
-6. Napisz test routera zadań przez `supertest`, **mockując wszystkie serwisy**, które transitywnie importuje `app.ts` (inaczej próba zaimportowania `app` pociągnie za sobą prawdziwego klienta Prisma).
+1. W kliencie zainstaluj Jest, `jest-environment-jsdom` i Testing Library.
+2. Skonfiguruj Jest przez `next/jest`.
+3. Napisz testy dla `TaskItem`.
+4. Napisz testy dla `TaskList`.
+5. Napisz testy dla `TaskForm`.
+6. Napisz test hooka `useEntityList`.
+7. W serwerze zainstaluj Jest, `ts-jest` i Supertest.
+8. Wydziel `app.ts`, żeby testy nie startowały portu.
+9. Napisz testy walidacji Zod i modułu JWT.
+10. Napisz prosty test routera zadań z mockami.
+11. Uruchom testy, typecheck i build.
+12. Zrób commit z tagiem `checkpoint-11`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -2186,19 +2144,19 @@ git tag checkpoint-11
 
 ### Opis zadania
 
-Spakujesz całą aplikację (bazę danych, backend, frontend) tak, żeby odpalała
-się jedną komendą, niezależnie od tego, co masz zainstalowane lokalnie. To
-ćwiczenie z multi-stage Dockerfile (mniejsze, bezpieczniejsze obrazy
-produkcyjne) oraz z `docker-compose` (orkiestracja kilku kontenerów naraz).
+Pakujesz aplikację do kontenerów. Frontend, backend i baza mogą być uruchamiane jednym poleceniem przez Docker Compose.
 
 ### Instrukcja
 
-1. W `next.config.js` dodaj `output: 'standalone'` — Next.js spakuje wtedy tylko niezbędny kod i zależności do działania serwera produkcyjnego (mniejszy obraz).
-2. Stwórz `Dockerfile` dla `client/` w trzech etapach: instalacja zależności → build (**uwaga**: zmienne `NEXT_PUBLIC_*` Next.js zaszywa w kodzie już na etapie builda, więc musisz przekazać je jako `ARG`, nie jako zwykłą zmienną środowiskową kontenera w runtime) → obraz produkcyjny kopiujący tylko `.next/standalone`.
-3. Stwórz `Dockerfile` dla `server/` w trzech etapach: instalacja → build (z `npx prisma generate` w tym kroku!) → obraz produkcyjny z `npm ci --omit=dev` (uwaga: jeśli chcesz uruchamiać migracje przy starcie kontenera, pakiet `prisma` musi być w `dependencies`, nie `devDependencies` — inaczej zniknie po `--omit=dev`).
-4. Napisz skrypt startowy (`docker-entrypoint.sh`) dla serwera: najpierw `npx prisma migrate deploy`, potem start aplikacji.
-5. Stwórz `docker-compose.yml` w katalogu głównym z trzema serwisami: `db` (Postgres, z healthcheckiem), `server` (zależny od zdrowej bazy), `client` (zależny od serwera, z `build.args` ustawiającym `NEXT_PUBLIC_API_URL`).
-6. Sprawdź, że `docker compose up --build` odpala całość, a aplikacja działa identycznie jak przy lokalnym odpalaniu `npm run dev`.
+1. Dodaj Dockerfile dla `server` z etapami instalacji, builda i uruchomienia.
+2. Dodaj entrypoint serwera, który uruchamia migracje Prisma przed startem aplikacji.
+3. Dodaj Dockerfile dla `client` z buildem Next.js.
+4. Ustaw Next.js na output `standalone`.
+5. Dodaj `docker-compose.yml` z usługami `db`, `server` i `client`.
+6. Przekaż `DATABASE_URL`, `JWT_SECRET` i adres API przez zmienne środowiskowe.
+7. Sprawdź zwykły build klienta i serwera.
+8. Jeśli Docker działa lokalnie, sprawdź też `docker compose build`.
+9. Zrób commit i tag `checkpoint-12`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -2327,18 +2285,18 @@ git tag checkpoint-12
 
 ### Opis zadania
 
-Skonfigurujesz automatyczny pipeline, który przy każdym push/PR sprawdza,
-czy kod się kompiluje, przechodzi testy i buduje — zarówno dla frontendu,
-backendu, jak i obrazów Docker. To pierwszy krok do tego, żeby błędy
-wykrywać automatycznie, zanim trafią na produkcję.
+Dodajesz automatyczne sprawdzanie projektu w GitHub Actions. Dzięki temu po pushu albo PR repo samo uruchomi testy i build.
 
 ### Instrukcja
 
-1. Stwórz `.github/workflows/ci.yml`, uruchamiany na `push`/`pull_request` do `main`.
-2. Zdefiniuj job `server`: checkout → setup Node 20 (z cache npm) → `npm ci` → **`npx prisma generate`** (bez tego TypeScript nie zobaczy typów modeli!) → `npm run typecheck` → `npm test` (Twoje testy z Zadania 11 powinny przejść **bez** bazy danych, bo mockują serwisy) → `npm run build`.
-3. Zdefiniuj analogiczny job `client`: `npm ci` → `typecheck` → `test` → `build`.
-4. Zdefiniuj job `docker-build` (zależny od poprzednich dwóch przez `needs`): `docker compose build` — sprawdza, że obrazy z Zadania 12 się budują, bez ich publikowania.
-5. (Opcjonalnie) Zdefiniuj job `deploy`, domyślnie wyłączony warunkiem `if` (np. `&& false`), wdrażający frontend na Vercel i backend przez webhook Render — żeby nie failował na repo bez skonfigurowanych sekretów. Włączysz go po dodaniu sekretów `VERCEL_TOKEN`/`RENDER_DEPLOY_HOOK_URL` w ustawieniach repozytorium.
+1. Utwórz `.github/workflows/ci.yml`.
+2. Dodaj job `server`.
+3. W jobie serwera uruchom `npm ci`, `prisma generate`, typecheck, test i build.
+4. Dodaj job `client`.
+5. W jobie klienta uruchom `npm ci`, typecheck, test i build.
+6. Dodaj job `docker-build`, który zależy od klienta i serwera.
+7. Dodaj opcjonalny, wyłączony job deploy.
+8. Zrób commit i tag `checkpoint-13`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -2417,21 +2375,20 @@ git push origin main --tags
 
 ### Opis zadania
 
-Dodasz prosty log zdarzeń (kto co zrobił i kiedy) i zbudujesz na jego
-podstawie panel statystyk. To też pretekst do dyskusji teoretycznej: czym
-różni się baza, z której właśnie korzysta aplikacja (OLTP), od hurtowni
-danych (OLAP) i „jeziora danych” (surowe zdarzenia w plikach) — bez pełnej
-implementacji żadnego z tych dwóch ostatnich, tylko jako wprowadzenie.
+Dodajesz prosty log zdarzeń i panel statystyk. To ma pokazać, jak z danych aplikacji można zrobić pierwsze informacje analityczne.
 
 ### Instrukcja
 
-1. Dodaj do `schema.prisma` model `ActivityLog` (relacja do `Task`, pola `action`, `payload` typu JSON) i indeksy (`@@index`) na `Task.projectId` i `Task.status` — przydadzą się do zapytań agregujących.
-2. Wygeneruj nową migrację.
-3. Stwórz serwis logujący zdarzenia (`logActivity`) i agregujący statystyki: liczbę zadań w każdym statusie dla projektu (`prisma.task.groupBy`) oraz listę ostatnich zdarzeń.
-4. W serwisie zadań: przy tworzeniu zadania zaloguj zdarzenie `TASK_CREATED`; przy zmianie statusu — `STATUS_CHANGED` (z informacją, jaki był stary i nowy status).
-5. Dodaj endpoint `GET /projects/:id/stats` zwracający te dwie informacje naraz.
-6. Po stronie klienta: hook pobierający statystyki, komponent wyświetlający liczniki per status + listę ostatniej aktywności, podłączony na stronie szczegółów projektu (z odświeżaniem po każdej zmianie zadania).
-7. **Ćwiczenie dyskusyjne (bez kodu):** napisz krótki skrypt, który eksportuje cały `ActivityLog` do pliku JSON na dysku — to bardzo uproszczona ilustracja idei „data lake”. Zastanów się: jak wyglądałby tu krok ETL/ELT budujący zagregowane tabele w hurtowni? Dlaczego analitycy nie powinni odpytywać bazy produkcyjnej wprost?
+1. Dodaj model `ActivityLog` w Prisma.
+2. Dodaj indeksy na `Task.projectId` i `Task.status`.
+3. Przygotuj migrację dla nowych tabel i indeksów.
+4. Dodaj serwis do zapisywania zdarzeń.
+5. Loguj utworzenie zadania i zmianę statusu.
+6. Dodaj endpoint `/projects/:id/stats`.
+7. W kliencie dodaj hook pobierający statystyki.
+8. Dodaj panel z licznikami statusów i ostatnią aktywnością.
+9. Dodaj prosty eksport logów do pliku JSON.
+10. Uruchom walidację i zrób commit z tagiem `checkpoint-14`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
@@ -2537,24 +2494,21 @@ git tag checkpoint-14
 
 ### Opis zadania
 
-Ostatni etap: podłączysz aplikację do zewnętrznego dostawcy AI (Anthropic),
-dodając dwie funkcje — automatyczne podsumowanie opisu zadania i prostego
-asystenta, który odpowiada na pytania o stan projektu na podstawie realnych
-danych z bazy. Najważniejsza lekcja tego zadania jest **architektoniczna**:
-gdzie powinien żyć klucz API i jak nie pozwolić modelowi „zmyślać”.
+Na końcu dodajesz prostą integrację z API AI. Klucz API zostaje po stronie serwera, a frontend tylko woła własne endpointy backendu.
 
 ### Instrukcja
 
-1. Zainstaluj SDK dostawcy AI w `server/` (klucz API **zawsze** po stronie serwera — frontend nigdy nie powinien znać klucza API do zewnętrznego dostawcy).
-2. Stwórz serwis AI z dwiema funkcjami:
-   - `summarizeText(text)` — wysyła tekst do modelu z krótkim promptem systemowym proszącym o streszczenie w 1–2 zdaniach.
-   - `answerProjectQuestion(question, context)` — wysyła pytanie razem z listą zadań projektu jako kontekstem, z promptem systemowym **wymuszającym**, żeby model odpowiadał wyłącznie na podstawie przekazanych danych (a nie ogólnej wiedzy).
-3. Zdefiniuj specjalny typ błędu na wypadek braku skonfigurowanego klucza API, i obsłuż go w middleware błędów jako `503` z czytelnym komunikatem (zamiast niezrozumiałego crasha).
-4. Dodaj endpoint `POST /tasks/:id/summarize` (znajduje zadanie, woła `summarizeText` na jego opisie).
-5. Dodaj endpoint `POST /projects/:id/ask` (sprawdza własność projektu, pobiera jego zadania, woła `answerProjectQuestion`).
-6. Po stronie klienta: dodaj przycisk „Podsumuj AI” na każdym zadaniu — **uwaga**, element zadania ma już własny `onClick` do zmiany statusu, więc musisz zatrzymać propagację zdarzenia (`event.stopPropagation()`), żeby kliknięcie przycisku nie zmieniało jednocześnie statusu.
-7. Stwórz komponent „Asystent projektu”: pole tekstowe z pytaniem, przycisk, wyświetlenie odpowiedzi. Podłącz go na stronie szczegółów projektu.
-8. Sprawdź działanie obu funkcji w przeglądarce po skonfigurowaniu klucza API.
+1. Zainstaluj SDK dostawcy AI w `server`.
+2. Dodaj serwis AI z funkcją podsumowania tekstu.
+3. Dodaj funkcję odpowiadania na pytanie o projekt na podstawie zadań.
+4. Obsłuż brak klucza API czytelnym błędem `503`.
+5. Dodaj endpoint `POST /tasks/:id/summarize`.
+6. Dodaj endpoint `POST /projects/:id/ask`.
+7. W kliencie dodaj przycisk `Podsumuj AI` przy zadaniu.
+8. Zatrzymaj propagację kliknięcia przycisku, żeby nie zmieniać statusu zadania.
+9. Dodaj prosty komponent asystenta projektu.
+10. Sprawdź typecheck, testy i build.
+11. Zrób commit oraz tag `checkpoint-15`.
 
 <details>
 <summary>📄 Pokaż gotowy kod (rozwiązanie)</summary>
