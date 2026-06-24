@@ -1,0 +1,2 @@
+Folder na statyczne pliki (obrazy, favicon itd.) serwowane bezpośrednio przez Next.js.
+Wymagany przez Dockerfile (etap "runner" kopiuje ten folder do obrazu produkcyjnego).

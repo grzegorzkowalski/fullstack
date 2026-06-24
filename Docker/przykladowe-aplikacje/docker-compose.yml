@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: shopblog
+      POSTGRES_PASSWORD: shopblog
+      POSTGRES_DB: shopblog
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U shopblog -d shopblog']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./express-shop-blog
+    ports:
+      - '4000:4000'
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgresql://shopblog:shopblog@db:5432/shopblog
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: tajnehaslo123
+      JWT_SECRET: bardzo-tajny-klucz-jwt
+      CORS_ORIGIN: http://localhost:3000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./travel-log
+      args:
+        # NEXT_PUBLIC_* musi trafić jako build arg — Next.js "wpieka" tę wartość
+        # do kodu klienckiego już w czasie budowania obrazu (zob. README).
+        NEXT_PUBLIC_API_URL: http://localhost:4000
+    ports:
+      - '3000:3000'
+    environment:
+      PORT: 3000
+      # Runtime dla komponentów serwerowych Next.js wewnątrz sieci Dockera.
+      # Kod kliencki w przeglądarce dalej używa build arga powyżej: localhost:4000.
+      API_INTERNAL_URL: http://api:4000
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
